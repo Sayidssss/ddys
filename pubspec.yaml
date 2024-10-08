@@ -1,0 +1,82 @@
+name: ddys
+description: "A new Flutter project."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.3 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  flutter_native_splash: ^2.4.1
+  getx_scaffold:
+    path: flutter_getx_scaffold
+  dio_cookie_manager: ^3.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  icons_launcher: ^2.1.7
+
+# flutter_icons 应用启动图标配置 https://pub-web.flutter-io.cn/packages/icons_launcher
+# flutter pub run icons_launcher:create
+icons_launcher:
+  image_path: "assets/icons/ic_launcher.png"
+  platforms:
+    android:
+      enable: true
+      adaptive_background_color: "#ffffff"
+      adaptive_foreground_image: "assets/icons/ic_launcher_adaptive.png"
+    ios:
+      enable: true
+
+# flutter_native_splash 闪屏页配置 https://pub-web.flutter-io.cn/packages/flutter_native_splash
+# dart pub run flutter_native_splash:create
+# dart pub run flutter_native_splash:remove
+flutter_native_splash:
+  android: true
+  ios: true
+  color: "#ffffff"
+  color_dark: "#23232a"
+  image: "assets/icons/ic_launcher_adaptive.png"
+  image_dark: "assets/icons/ic_launcher_adaptive_dark.png"
+  android_12:
+    color: "#ffffff"
+    color_dark: "#23232a"
+    image: "assets/icons/ic_launcher_adaptive.png"
+    image_dark: "assets/icons/ic_launcher_adaptive_dark.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/svgs/
+    - assets/images/
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Montserrat-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Montserrat-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Montserrat-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Montserrat-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Montserrat-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
+          weight: 800
+        - asset: assets/fonts/Montserrat-Black.ttf
+          weight: 900
