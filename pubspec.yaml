@@ -16,6 +16,8 @@ dependencies:
   getx_scaffold:
     path: flutter_getx_scaffold
   dio_cookie_manager: ^3.1.1
+  html: ^0.15.4
+  pull_to_refresh_flutter3: ^2.0.2
 
 dev_dependencies:
   flutter_test:

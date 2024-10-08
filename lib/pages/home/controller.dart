@@ -1,3 +1,4 @@
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
 
 class HomeController extends GetxController with BaseControllerMixin {
@@ -12,6 +13,7 @@ class HomeController extends GetxController with BaseControllerMixin {
   @override
   void onInit() {
     super.onInit();
+    FlutterNativeSplash.remove();
   }
 
   void setIndex(index) {
