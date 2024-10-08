@@ -18,12 +18,15 @@ dependencies:
   dio_cookie_manager: ^3.1.1
   html: ^0.15.4
   pull_to_refresh_flutter3: ^2.0.2
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
   icons_launcher: ^2.1.7
+  json_serializable: ^6.8.0
+  build_runner: ^2.4.13
 
 # flutter_icons 应用启动图标配置 https://pub-web.flutter-io.cn/packages/icons_launcher
 # flutter pub run icons_launcher:create

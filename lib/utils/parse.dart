@@ -21,3 +21,5 @@ List<Article> parseArticleList(List<Element> list) {
     return article;
   }).toList();
 }
+
+// Video parseVideoInfo() {}
