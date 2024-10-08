@@ -1,9 +1,9 @@
 import 'package:ddys/common/model/entity.dart';
 import 'package:ddys/pages/video/index.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:getx_scaffold/common/index.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import 'index.dart';
 
@@ -12,24 +12,29 @@ class IndexPage extends GetView<IndexController> {
 
   // 主视图
   Widget _buildView() {
-    return SmartRefresher(
+    return EasyRefresh.builder(
       controller: controller.smartController,
-      // onRefresh: controller.onRefresh(),
-      // onLoading: controller.onLoading(),
-      child: GridView.builder(
-        padding: EdgeInsets.all(10.dm),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 10.dm,
-          mainAxisSpacing: 10.dm,
-          childAspectRatio: 1.0 / 1.8,
-        ),
-        itemBuilder: (context, index) {
-          var article = controller.articleList[index];
-          return _buildArticle(article);
+      onRefresh: () async {
+        controller.onRefresh();
         },
-        itemCount: controller.articleList.length,
-      ),
+      onLoad:() async { controller.onLoading(); },
+      childBuilder: (context,physic){
+        return GridView.builder(
+          physics: physic,
+          padding: EdgeInsets.all(10.dm),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 10.dm,
+            mainAxisSpacing: 10.dm,
+            childAspectRatio: 1.0 / 1.8,
+          ),
+          itemBuilder: (context, index) {
+            var article = controller.articleList[index];
+            return _buildArticle(article);
+          },
+          itemCount: controller.articleList.length,
+        );
+      },
     );
   }
 
