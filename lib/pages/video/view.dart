@@ -13,8 +13,9 @@ class VideoPage extends GetView<VideoController> {
   // 主视图
   Widget _buildView() {
     return <Widget>[
+      if(controller.flickManager!=null)
       FlickVideoPlayer(
-        flickManager: controller.flickManager,
+        flickManager: controller.flickManager!,
         flickVideoWithControlsFullscreen: _buildFullScreenControl(),
       ).aspectRatio(aspectRatio: 16.0 / 9.0),
       [
@@ -56,6 +57,23 @@ class VideoPage extends GetView<VideoController> {
             },
             itemCount: controller.video?.seasons.length ?? 0,
           ).height(40.dm),
+          if(controller.video?.videoIntro!=null)
+            Column(children: [
+                Row(
+                  children: [
+                    ExtendedImage.network(controller.video!.videoIntro!.post!,width: 100.dm,height: 141.dm,headers: {'Referer':controller.url},).marginOnly(right: 10.dm,),
+                    Expanded(
+                      child: Column(children: [
+                        TextX.bodyLarge(controller.video!.videoIntro!.title!).marginOnly(bottom: 10.dm),
+                        TextX.bodyMedium(controller.video!.videoIntro!.intro!,maxLines: 6,),
+                      ],).marginOnly(bottom: 10.dm,),
+                    )
+                  ],
+
+                ),
+              TextX.bodyMedium(controller.video!.videoIntro!.abstract!),
+
+            ],).padding(all: 10.dm).card().marginOnly(top: 10.dm)
       ]
           .toColumn(crossAxisAlignment: CrossAxisAlignment.start)
           .padding(all: 10.w, bottom: 0.w)
@@ -77,11 +95,11 @@ class VideoPage extends GetView<VideoController> {
             if (didPop) {
               return;
             }
-            if (controller.flickManager.flickControlManager?.isFullscreen ==
+            if (controller.flickManager?.flickControlManager?.isFullscreen ==
                 false) {
               SystemNavigator.pop();
             } else {
-              controller.flickManager.flickControlManager?.exitFullscreen();
+              controller.flickManager?.flickControlManager?.exitFullscreen();
             }
           },
           child: Scaffold(

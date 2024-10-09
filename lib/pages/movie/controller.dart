@@ -13,6 +13,12 @@ class MovieController extends GetxController with BaseControllerMixin {
     'https://ddys.pro/category/movie/asian-movie/',
     'https://ddys.pro/category/movie/chinese-movie/'
   ];
+  List<String> cateNames = [
+    '全部',
+    '欧美',
+    '亚洲',
+    '华语'
+  ];
   List<Article> articleList = [];
   var page = 1;
   var currentIndex = 0;

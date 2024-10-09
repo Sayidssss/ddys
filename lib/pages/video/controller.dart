@@ -16,23 +16,25 @@ class VideoController extends GetxController with BaseControllerMixin {
 
   String url = '';
   Video? video;
-  FlickManager flickManager = FlickManager(
-      videoPlayerController:
-          VideoPlayerController.networkUrl(Uri.parse(_currentUrl)));
+  FlickManager? flickManager ;
 
   static String _currentUrl = "";
   @override
   void onInit() {
     super.onInit();
     url = (Get.arguments as Map<String, String>)['url']!;
+    flickManager = FlickManager(
+        videoPlayerController:
+        VideoPlayerController.networkUrl(Uri.parse(_currentUrl)));
     getVideoInfo();
   }
 
   @override
-  void onDetached() {
-    flickManager.dispose();
-    super.onDetached();
+  void onClose() {
+    flickManager?.dispose();
+    super.onClose();
   }
+
 
   Future getVideoInfo() async {
     showLoading();
@@ -41,7 +43,7 @@ class VideoController extends GetxController with BaseControllerMixin {
       var doc = parse(response.data);
       video = _parseVideoInfo(doc);
       _currentUrl = 'https://v.ddys.pro${video!.videoMeta!.tracks[0].src0}';
-      flickManager.handleChangeVideo(
+      flickManager?.handleChangeVideo(
         VideoPlayerController.networkUrl(Uri.parse(_currentUrl),
             httpHeaders: {'Referer': 'https://ddys.pro/'}),
       );
@@ -131,7 +133,7 @@ class VideoController extends GetxController with BaseControllerMixin {
 
   void setCurrentTrack(Track track) {
     _currentUrl = 'https://v.ddys.pro${track.src0}';
-    flickManager.handleChangeVideo(
+    flickManager?.handleChangeVideo(
       VideoPlayerController.networkUrl(Uri.parse(_currentUrl),
           httpHeaders: {'Referer': 'https://ddys.pro/'}),
     );

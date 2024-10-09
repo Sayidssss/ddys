@@ -1,5 +1,6 @@
 import 'package:ddys/common/model/entity.dart';
 import 'package:ddys/pages/video/index.dart';
+import 'package:ddys/utils/parse.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:getx_scaffold/common/index.dart';
@@ -32,56 +33,12 @@ class IndexPage extends GetView<IndexController> {
           ),
           itemBuilder: (context, index) {
             var article = controller.articleList[index];
-            return _buildArticle(article);
+            return buildArticle(article);
           },
           itemCount: controller.articleList.length,
         );
       },
     );
-  }
-
-  Card _buildArticle(Article article) {
-    return Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5.dm))),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ExtendedImage.network(
-              article.pic,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-            ).aspectRatio(aspectRatio: 1.0 / 1.414),
-            Container(
-              padding: EdgeInsets.all(5.dm),
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextX(
-                    article.name,
-                    size: 10.sp,
-                    maxLines: 1,
-                  ),
-                  Row(
-                    children: _getCates(article.categories),
-                  ),
-                  if (article.remark != null)
-                    TextX(
-                      article.remark!,
-                      size: 6.sp,
-                    ),
-                ],
-              ),
-            )
-          ],
-        ).onTap(() {
-          Get.to(() => VideoPage(), arguments: {'url': article.url});
-        }));
   }
 
   @override
@@ -112,12 +69,4 @@ class IndexPage extends GetView<IndexController> {
       ),
     );
   }
-
-  List<Widget> _getCates(List<Category> categories) {
-    List<Widget> list = [];
-    for (var cate in categories) {
-      list.add(TextX(cate.name, size: 6.sp).marginOnly(right: 5.dm));
-    }
-    return list;
-  }
-}
+ }

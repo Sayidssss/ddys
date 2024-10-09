@@ -54,14 +54,14 @@ class HomePage extends GetView<HomeController> {
           selectedIcon: AntdIcon.calendar_fill,
         ),
         NavigationItemModel(
-          label: '动画',
-          icon: AntdIcon.bell,
-          selectedIcon: AntdIcon.bell_fill,
+          label: '动漫',
+          icon: AntdIcon.file_image,
+          selectedIcon: AntdIcon.file_image_fill,
         ),
         NavigationItemModel(
-          label: '设置',
-          icon: AntdIcon.setting,
-          selectedIcon: AntdIcon.setting_fill,
+          label: '标签',
+          icon: AntdIcon.tags,
+          selectedIcon: AntdIcon.tags_fill,
         ),
       ],
     );
