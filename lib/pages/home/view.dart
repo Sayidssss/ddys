@@ -17,7 +17,8 @@ class HomePage extends GetView<HomeController> {
     return PageView(
       controller: controller.pageController,
       onPageChanged: (index) {
-        controller.setIndex(index);
+        controller.pageIndex = index;
+        controller.updateUi();
       },
       children: [
         const IndexPage(),
@@ -68,17 +69,20 @@ class HomePage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(
-      init: HomeController(),
-      id: 'home',
-      builder: (_) {
-        return Scaffold(
-          extendBody: false,
-          resizeToAvoidBottomInset: false,
-          bottomNavigationBar: _buildNavigationBar(),
-          body: _buildView(),
-        );
-      },
+    return DoublePressBackWidget(
+      message: "再按一次退出",
+      child: GetBuilder<HomeController>(
+        init: HomeController(),
+        id: 'home',
+        builder: (_) {
+          return Scaffold(
+            extendBody: false,
+            resizeToAvoidBottomInset: false,
+            bottomNavigationBar: _buildNavigationBar(),
+            body: _buildView(),
+          );
+        },
+      ),
     );
   }
 }

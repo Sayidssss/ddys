@@ -16,9 +16,11 @@ class IndexPage extends GetView<IndexController> {
       controller: controller.smartController,
       onRefresh: () async {
         controller.onRefresh();
-        },
-      onLoad:() async { controller.onLoading(); },
-      childBuilder: (context,physic){
+      },
+      onLoad: () async {
+        controller.onLoading();
+      },
+      childBuilder: (context, physic) {
         return GridView.builder(
           physics: physic,
           padding: EdgeInsets.all(10.dm),
@@ -84,28 +86,30 @@ class IndexPage extends GetView<IndexController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<IndexController>(
-      init: IndexController(),
-      id: 'index',
-      builder: (_) {
-        return Scaffold(
-          appBar: AppBar(
-              title: const Text('首页'),
-              actions: [
-                IconX.icon(
-                  AntdIcon.search,
-                  width: 50.dm,
-                  height: 50.dm,
-                )
-                    .paddingSymmetric(horizontal: 10.dm, vertical: 5.dm)
-                    .inkWell(onTap: () {}, borderRadius: 5.dm)
-              ],
-              elevation: 1),
-          body: SafeArea(
-            child: _buildView(),
-          ),
-        );
-      },
+    return KeepAliveWrapper(
+      child: GetBuilder<IndexController>(
+        init: IndexController(),
+        id: 'index',
+        builder: (_) {
+          return Scaffold(
+            appBar: AppBar(
+                title: const Text('首页'),
+                actions: [
+                  IconX.icon(
+                    AntdIcon.search,
+                    width: 50.dm,
+                    height: 50.dm,
+                  )
+                      .paddingSymmetric(horizontal: 10.dm, vertical: 5.dm)
+                      .inkWell(onTap: () {}, borderRadius: 5.dm)
+                ],
+                elevation: 1),
+            body: SafeArea(
+              child: _buildView(),
+            ),
+          );
+        },
+      ),
     );
   }
 

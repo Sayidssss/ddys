@@ -17,6 +17,7 @@ class IndexController extends GetxController with BaseControllerMixin {
   @override
   void onInit() {
     super.onInit();
+    getIndexData();
   }
 
   Future<void> getIndexData() async {
@@ -39,8 +40,8 @@ class IndexController extends GetxController with BaseControllerMixin {
     await getIndexData();
   }
 
-  Future<void>  onLoading() async {
+  Future<void> onLoading() async {
     page++;
-    await  getIndexData();
+    await getIndexData();
   }
 }

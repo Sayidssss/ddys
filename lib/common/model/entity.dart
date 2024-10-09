@@ -1,3 +1,5 @@
+import 'package:ddys/common/model/video.dart';
+
 class Category {
   String name;
   String url;
@@ -18,6 +20,18 @@ class Tag {
   });
 }
 
+class Season {
+  String name;
+  String url;
+  bool isCurrent;
+
+  Season({
+    required this.name,
+    required this.url,
+    required this.isCurrent,
+  });
+}
+
 class Article {
   String name;
   String url;
@@ -29,10 +43,16 @@ class Article {
 }
 
 class Video {
-  Stream name;
-  List<Category> categories;
-  List<Tag> tags;
-  Video(this.name, this.categories, this.tags);
+  String? name;
+  String? publishDate;
+  String? updateDate;
+  List<Category>? categories;
+  List<Tag>? tags;
+  VideoMeta? videoMeta;
+  VideoIntro? videoIntro;
+  List<Season> seasons;
+  Video(this.name, this.publishDate, this.updateDate, this.categories,
+      this.tags, this.videoMeta, this.videoIntro, this.seasons);
 }
 
 class VideoIntro {
