@@ -34,9 +34,9 @@ class VideoPage extends GetView<VideoController> {
           },
           itemCount: controller.video?.videoMeta?.tracks.length ?? 0,
         ).height(40.dm),
-        if (controller.video!.seasons.isNotEmpty)
+        if (controller.video?.seasons.length != 0)
           TextX.bodyMedium('选择季数').marginSymmetric(vertical: 10.dm),
-        if (controller.video!.seasons.isNotEmpty)
+        if (controller.video?.seasons.length != 0)
           ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,

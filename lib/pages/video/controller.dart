@@ -28,6 +28,12 @@ class VideoController extends GetxController with BaseControllerMixin {
     getVideoInfo();
   }
 
+  @override
+  void onDetached() {
+    flickManager.dispose();
+    super.onDetached();
+  }
+
   Future getVideoInfo() async {
     showLoading();
     var response = await HttpService.to.get(url);
