@@ -9,7 +9,10 @@ List<Article> parseArticleList(List<dom.Element> list) {
     var url = a.attributes['data-href']!;
     var container = a.querySelector('div.post-box-image');
     String bg = container!.attributes['style']!;
-    var pic = bg.substring(bg.indexOf("https://"), bg.indexOf(")"));
+    var pic = "";
+    if (bg != 'background-image: url();') {
+      pic = bg.substring(bg.indexOf("https://"), bg.indexOf(")"));
+    }
     var name = a.querySelector('div.post-box-text > h2')!.text;
     var remark = a.querySelector('div.post-box-text > p')?.text;
     var categories = a.querySelectorAll('.post-box-meta > a');
@@ -24,7 +27,6 @@ List<Article> parseArticleList(List<dom.Element> list) {
     return article;
   }).toList();
 }
-
 
 Card buildArticle(Article article) {
   return Card(

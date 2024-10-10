@@ -9,7 +9,7 @@ import 'index.dart';
 class MinePage extends GetView<MineController> {
   const MinePage({super.key});
 
-  // 主视图
+// 主视图
   Widget _buildView() {
     return EasyRefresh.builder(
       controller: controller.smartController,
@@ -41,24 +41,25 @@ class MinePage extends GetView<MineController> {
 
   @override
   Widget build(BuildContext context) {
-    return KeepAliveWrapper(
-      child: GetBuilder<MineController>(
-        init: MineController(),
-        id: 'anime',
-        builder: (_) {
-          return Scaffold(
+    return GetBuilder<MineController>(
+      init: MineController(),
+      id: 'mine',
+      builder: (_) {
+        return KeepAliveWrapper(
+          child: Scaffold(
+            extendBody: false,
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
-                title: buildCates(controller.cateNames).toListView(
-                    scrollDirection: Axis.horizontal).height(40.dm),
-                elevation: 1,actions: [
-              IconX.icon(Icons.settings).paddingSymmetric(horizontal: 10.dm).inkWell(onTap: (){})
-            ]),
+                title: buildCates(controller.cateNames)
+                    .toListView(scrollDirection: Axis.horizontal)
+                    .height(40.dm),
+                elevation: 1),
             body: SafeArea(
               child: _buildView(),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -72,8 +73,8 @@ class MinePage extends GetView<MineController> {
           foregroundColor: controller.currentIndex == i
               ? Colors.black
               : ThemeColor.primary, onPressed: () {
-            controller.setCurrentIndex(i);
-          }));
+        controller.setCurrentIndex(i);
+      }));
     }
     return list;
   }

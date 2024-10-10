@@ -13,25 +13,15 @@ class MineController extends GetxController with BaseControllerMixin {
     'https://ddys.pro/tag/romance/',
     'https://ddys.pro/tag/sci-fi/',
     'https://ddys.pro/tag/crime/',
-    'https://ddys.pro/tag/mystery/'
+    'https://ddys.pro/tag/mystery/',
     'https://ddys.pro/tag/horror/'
-
   ];
-  List<String> cateNames = [
-    '动作',
-    '喜剧',
-    '爱情',
-    '科幻',
-    '犯罪',
-    '悬疑',
-    '恐怖'
-  ];
+  List<String> cateNames = ['动作', '喜剧', '爱情', '科幻', '犯罪', '悬疑', '恐怖'];
   List<Article> articleList = [];
   var page = 1;
   var currentIndex = 0;
   var smartController = EasyRefreshController();
   MineController();
-
 
   @override
   void onInit() {
