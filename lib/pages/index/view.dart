@@ -1,4 +1,5 @@
 import 'package:ddys/common/model/entity.dart';
+import 'package:ddys/pages/search/index.dart';
 import 'package:ddys/pages/video/index.dart';
 import 'package:ddys/utils/parse.dart';
 import 'package:easy_refresh/easy_refresh.dart';
@@ -56,9 +57,12 @@ class IndexPage extends GetView<IndexController> {
                     AntdIcon.search,
                     width: 50.dm,
                     height: 50.dm,
-                  )
-                      .paddingSymmetric(horizontal: 10.dm, vertical: 5.dm)
-                      .inkWell(onTap: () {}, borderRadius: 5.dm)
+                  ).paddingSymmetric(horizontal: 10.dm, vertical: 5.dm).inkWell(
+                      onTap: () {
+                        Get.to(() => SearchPage(),
+                            transition: Transition.fadeIn);
+                      },
+                      borderRadius: 5.dm)
                 ],
                 elevation: 1),
             body: SafeArea(
@@ -69,4 +73,4 @@ class IndexPage extends GetView<IndexController> {
       ),
     );
   }
- }
+}
