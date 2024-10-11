@@ -4,26 +4,21 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
 import 'package:html/parser.dart';
 
-class AnimeController extends GetxController with BaseControllerMixin {
+class OtherController extends GetxController with BaseControllerMixin {
   @override
-  String get builderId => 'anime';
+  String get builderId => 'other';
   List<String> urls = [
     'https://ddys.pro/category/anime/',
     'https://ddys.pro/category/documentary/',
-        'https://ddys.pro/category/variety/',
-        'https://ddys.pro/category/concert/'
+    'https://ddys.pro/category/variety/',
+    'https://ddys.pro/category/concert/'
   ];
-  List<String> cateNames = [
-    '动漫',
-    '纪录片',
-        '综艺',
-        '演唱会'
-  ];
+  List<String> cateNames = ['动漫', '纪录片', '综艺', '演唱会'];
   List<Article> articleList = [];
   var page = 1;
   var currentIndex = 0;
   var smartController = EasyRefreshController();
-  AnimeController();
+  OtherController();
   @override
   void onInit() {
     super.onInit();

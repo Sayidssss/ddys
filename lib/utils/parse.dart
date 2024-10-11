@@ -42,6 +42,7 @@ Card buildArticle(Article article) {
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
+            headers: {'Referer': 'https://ddys.pro/'},
           ).aspectRatio(aspectRatio: 1.0 / 1.414),
           Container(
             padding: EdgeInsets.all(5.dm),

@@ -6,8 +6,8 @@ import 'package:getx_scaffold/getx_scaffold.dart';
 
 import 'index.dart';
 
-class AnimePage extends GetView<AnimeController> {
-  const AnimePage({super.key});
+class OtherPage extends GetView<OtherController> {
+  const OtherPage({super.key});
 
   // 主视图
   Widget _buildView() {
@@ -42,14 +42,15 @@ class AnimePage extends GetView<AnimeController> {
   @override
   Widget build(BuildContext context) {
     return KeepAliveWrapper(
-      child: GetBuilder<AnimeController>(
-        init: AnimeController(),
-        id: 'anime',
+      child: GetBuilder<OtherController>(
+        init: OtherController(),
+        id: 'other',
         builder: (_) {
           return Scaffold(
             appBar: AppBar(
-                title: buildCates(controller.cateNames).toListView(
-                    scrollDirection: Axis.horizontal).height(40.dm),
+                title: buildCates(controller.cateNames)
+                    .toListView(scrollDirection: Axis.horizontal)
+                    .height(40.dm),
                 elevation: 1),
             body: SafeArea(
               child: _buildView(),
@@ -70,8 +71,8 @@ class AnimePage extends GetView<AnimeController> {
           foregroundColor: controller.currentIndex == i
               ? Colors.black
               : ThemeColor.primary, onPressed: () {
-            controller.setCurrentIndex(i);
-          }));
+        controller.setCurrentIndex(i);
+      }));
     }
     return list;
   }

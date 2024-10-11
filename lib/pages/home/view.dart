@@ -1,8 +1,8 @@
-import 'package:ddys/pages/anime/index.dart';
 import 'package:ddys/pages/drama/index.dart';
 import 'package:ddys/pages/index/index.dart';
 import 'package:ddys/pages/mine/index.dart';
 import 'package:ddys/pages/movie/index.dart';
+import 'package:ddys/pages/other/index.dart';
 import 'package:flutter/material.dart';
 import 'package:getx_scaffold/common/index.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
@@ -24,7 +24,7 @@ class HomePage extends GetView<HomeController> {
         const IndexPage(),
         const MoviePage(),
         const DramaPage(),
-        const AnimePage(),
+        const OtherPage(),
         const MinePage(),
       ],
     );
@@ -54,7 +54,7 @@ class HomePage extends GetView<HomeController> {
           selectedIcon: AntdIcon.calendar_fill,
         ),
         NavigationItemModel(
-          label: '动漫',
+          label: '其他',
           icon: AntdIcon.file_image,
           selectedIcon: AntdIcon.file_image_fill,
         ),
