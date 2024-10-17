@@ -19,8 +19,13 @@ dependencies:
   html: ^0.15.4
   json_annotation: ^4.9.0
   easy_refresh: ^3.4.0
-  flick_video_player: ^0.9.0
+  flick_video_player:
+    path: flick_video_player
   video_player: ^2.9.2
+  flutter_rating: ^2.0.2
+  path_provider: ^2.1.4
+  encrypt: ^5.0.3
+  archive: ^3.6.1
 
 dev_dependencies:
   flutter_test:

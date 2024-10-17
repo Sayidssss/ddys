@@ -1,3 +1,4 @@
+import 'package:ddys/pages/video/seek_video_action.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
@@ -33,7 +34,7 @@ class PortraitControls extends StatelessWidget {
       children: <Widget>[
         Positioned.fill(
           child: FlickShowControlsAction(
-            child: FlickSeekVideoAction(
+            child: SeekVideoAction(
               child: Center(
                 child: FlickVideoBuffer(
                   child: FlickAutoHideChild(

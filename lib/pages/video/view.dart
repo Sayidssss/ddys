@@ -1,7 +1,9 @@
+import 'package:ddys/pages/video/landscape_controls.dart';
 import 'package:ddys/pages/video/portrait_controls.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rating/flutter_rating.dart';
 import 'package:getx_scaffold/common/index.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
 
@@ -13,11 +15,14 @@ class VideoPage extends GetView<VideoController> {
   // 主视图
   Widget _buildView() {
     return <Widget>[
-      if(controller.flickManager!=null)
-      FlickVideoPlayer(
-        flickManager: controller.flickManager!,
-        flickVideoWithControlsFullscreen: _buildFullScreenControl(),
-      ).aspectRatio(aspectRatio: 16.0 / 9.0),
+      if (controller.flickManager != null)
+        FlickVideoPlayer(
+          flickManager: controller.flickManager!,
+          flickVideoWithControls: const FlickVideoWithControls(
+            controls: LandscapeControls(),
+          ),
+          flickVideoWithControlsFullscreen: _buildFullScreenControl(),
+        ).aspectRatio(aspectRatio: 16.0 / 9.0),
       [
         TextX.titleMedium(controller.video?.name ?? "")
             .padding(vertical: 10.dm),
@@ -25,13 +30,13 @@ class VideoPage extends GetView<VideoController> {
         ListView.builder(
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            return ButtonX.outline(
-              (index + 1).toString(),
-              onPressed: () {
-                controller.setCurrentTrack(
-                    controller.video!.videoMeta!.tracks[index]);
-              },
-            ).width(40.dm).height(40.dm).marginOnly(right: 10.dm);
+            return controller.trackIndex == index
+                ? ButtonX.secondary((index + 1).toString(), onPressed: () {
+                    controller.setTrack(index);
+                  }).width(40.dm).height(40.dm).marginOnly(right: 10.dm)
+                : ButtonX.outline((index + 1).toString(), onPressed: () {
+                    controller.setTrack(index);
+                  }).width(40.dm).height(40.dm).marginOnly(right: 10.dm);
           },
           itemCount: controller.video?.videoMeta?.tracks.length ?? 0,
         ).height(40.dm),
@@ -57,23 +62,49 @@ class VideoPage extends GetView<VideoController> {
             },
             itemCount: controller.video?.seasons.length ?? 0,
           ).height(40.dm),
-          if(controller.video?.videoIntro!=null)
-            Column(children: [
-                Row(
-                  children: [
-                    ExtendedImage.network(controller.video!.videoIntro!.post!,width: 100.dm,height: 141.dm,headers: {'Referer':controller.url},).marginOnly(right: 10.dm,),
-                    Expanded(
-                      child: Column(children: [
-                        TextX.bodyLarge(controller.video!.videoIntro!.title!).marginOnly(bottom: 10.dm),
-                        TextX.bodyMedium(controller.video!.videoIntro!.intro!,maxLines: 6,),
-                      ],).marginOnly(bottom: 10.dm,),
-                    )
-                  ],
-
-                ),
+        if (controller.video?.videoIntro != null)
+          Column(
+            children: [
+              Row(
+                children: [
+                  ExtendedImage.network(
+                    controller.video!.videoIntro!.post!,
+                    width: 100.dm,
+                    height: 141.dm,
+                    headers: {'Referer': controller.url},
+                  ).marginOnly(
+                    right: 10.dm,
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        TextX.bodyLarge(controller.video!.videoIntro!.title!)
+                            .marginOnly(bottom: 10.dm),
+                        Row(
+                          children: [
+                            StarRating(
+                                starCount: 5,
+                                rating: (controller.video!.videoIntro!.rating!
+                                        .toDouble()! /
+                                    2.0)),
+                            TextX.bodyMedium(
+                                controller.video!.videoIntro!.rating!)
+                          ],
+                        ),
+                        TextX.bodyMedium(
+                          controller.video!.videoIntro!.intro!,
+                          maxLines: 6,
+                        ),
+                      ],
+                    ).marginOnly(
+                      bottom: 10.dm,
+                    ),
+                  )
+                ],
+              ),
               TextX.bodyMedium(controller.video!.videoIntro!.abstract!),
-
-            ],).padding(all: 10.dm).card().marginOnly(top: 10.dm)
+            ],
+          ).padding(all: 10.dm).card().marginOnly(top: 10.dm)
       ]
           .toColumn(crossAxisAlignment: CrossAxisAlignment.start)
           .padding(all: 10.w, bottom: 0.w)

@@ -186,6 +186,7 @@ class FlickControlManager extends ChangeNotifier {
   ///   possible that your specific video cannot be slowed down, in which case
   ///   the plugin also reports errors.
   Future<void> setPlaybackSpeed(double speed) async {
+    _flickManager._handleVideoSpeedup(isOn: speed != 1.0);
     await _videoPlayerController!.setPlaybackSpeed(speed);
     notifyListeners();
   }

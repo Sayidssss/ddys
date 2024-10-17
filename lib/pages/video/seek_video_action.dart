@@ -1,12 +1,13 @@
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:getx_scaffold/common/index.dart';
 import 'package:provider/provider.dart';
 
 /// GestureDetector's that calls [flickControlManager.seekForward]/[flickControlManager.seekBackward] onTap of opaque area/child.
 ///
 /// Renders two GestureDetector inside a row, the first detector is responsible to seekBackward and the second detector is responsible to seekForward.
-class FlickSeekVideoAction extends StatelessWidget {
-  const FlickSeekVideoAction({
+class SeekVideoAction extends StatelessWidget {
+  const SeekVideoAction({
     Key? key,
     this.child,
     this.forwardSeekIcon = const Icon(Icons.fast_forward),
@@ -57,8 +58,9 @@ class FlickSeekVideoAction extends StatelessWidget {
 
     bool showForwardSeek = displayManager.showForwardSeek;
     bool showBackwardSeek = displayManager.showBackwardSeek;
+    bool isSpeedUp = displayManager.showSpeed;
 
-    return Stack(children: <Widget>[
+    return Stack(alignment: Alignment.topCenter, children: <Widget>[
       Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -71,6 +73,14 @@ class FlickSeekVideoAction extends StatelessWidget {
                 } else {
                   controlManager.seekBackward(duration);
                 }
+              },
+              onLongPressStart: (details) {
+                isSpeedUp = true;
+                controlManager.setPlaybackSpeed(3.0);
+              },
+              onLongPressEnd: (details) {
+                isSpeedUp = false;
+                controlManager.setPlaybackSpeed(1.0);
               },
               child: Align(
                 alignment: Alignment.center,
@@ -101,6 +111,14 @@ class FlickSeekVideoAction extends StatelessWidget {
                   controlManager.seekForward(duration);
                 }
               },
+              onLongPressStart: (details) {
+                controlManager.setPlaybackSpeed(3.0);
+                isSpeedUp = true;
+              },
+              onLongPressEnd: (details) {
+                controlManager.setPlaybackSpeed(1.0);
+                isSpeedUp = false;
+              },
               child: Align(
                 alignment: Alignment.center,
                 child: AnimatedCrossFade(
@@ -123,6 +141,11 @@ class FlickSeekVideoAction extends StatelessWidget {
           )
         ],
       ),
+      if (isSpeedUp)
+        TextTag(
+          '播放速度 3X',
+          color: Colors.black38,
+        ).marginOnly(top: 10.dm),
       if (child != null) SizedBox(child: child),
     ]);
   }
