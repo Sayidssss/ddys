@@ -165,8 +165,6 @@ class VideoController extends GetxController with BaseControllerMixin {
     updateUi();
   }
 
-//https://v.ddys.pro/v/kr_drama/A_Virtuous_Business/A_Virtuous_Business_S01E01.mp4
-//https://v.ddys.pro/v/kr_drama/A_Virtuous_Business/A_Virtuous_Business_S01E01.mp4
   void setTrack(int index) {
     trackIndex = index;
     setCurrentTrack(video?.videoMeta?.tracks[index]);

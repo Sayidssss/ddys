@@ -52,6 +52,7 @@ class NavigationX extends StatelessWidget {
       widgets.add(
         ElevatedButton(
           style: ButtonStyle(
+              padding: WidgetStateProperty.all(EdgeInsets.zero),
               elevation: WidgetStateProperty.all(0),
               backgroundColor: WidgetStateProperty.all(Colors.transparent),
               overlayColor: WidgetStateProperty.all<Color>(

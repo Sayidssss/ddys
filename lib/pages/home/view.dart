@@ -3,6 +3,7 @@ import 'package:ddys/pages/index/index.dart';
 import 'package:ddys/pages/mine/index.dart';
 import 'package:ddys/pages/movie/index.dart';
 import 'package:ddys/pages/other/index.dart';
+import 'package:ddys/pages/tags/index.dart';
 import 'package:flutter/material.dart';
 import 'package:getx_scaffold/common/index.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
@@ -20,12 +21,13 @@ class HomePage extends GetView<HomeController> {
         controller.pageIndex = index;
         controller.updateUi();
       },
-      children: [
-        const IndexPage(),
-        const MoviePage(),
-        const DramaPage(),
-        const OtherPage(),
-        const MinePage(),
+      children: const [
+        IndexPage(),
+        MoviePage(),
+        DramaPage(),
+        OtherPage(),
+        TagsPage(),
+        MinePage(),
       ],
     );
   }
@@ -62,6 +64,11 @@ class HomePage extends GetView<HomeController> {
           label: '标签',
           icon: AntdIcon.tags,
           selectedIcon: AntdIcon.tags_fill,
+        ),
+        NavigationItemModel(
+          label: '设置',
+          icon: AntdIcon.setting,
+          selectedIcon: AntdIcon.setting_fill,
         ),
       ],
     );
