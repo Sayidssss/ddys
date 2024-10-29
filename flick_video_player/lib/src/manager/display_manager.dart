@@ -16,6 +16,7 @@ class FlickDisplayManager extends ChangeNotifier {
   bool _showPlayerControls = true;
   bool _showForwardSeek = false;
   bool _showSpeed = false;
+  bool _isDragSpeed = false;
   bool _showBackwardSeek = false;
   bool _showVolumeLevel = false;
   double? volume;
@@ -26,6 +27,7 @@ class FlickDisplayManager extends ChangeNotifier {
   // Show forward seek icon or not.
   bool get showForwardSeek => _showForwardSeek;
   bool get showSpeed => _showSpeed;
+  bool get isDragSpeed => _isDragSpeed;
 
   // Show backward seek icon or not.
   bool get showBackwardSeek => _showBackwardSeek;
@@ -156,6 +158,11 @@ class FlickDisplayManager extends ChangeNotifier {
 
   _handleVideoSpeedup({required bool isOn}) {
     _showSpeed = isOn;
+    _notify();
+  }
+
+  _handleVideoIsDragSpeed({required bool isOn}) {
+    _isDragSpeed = isOn;
     _notify();
   }
 }

@@ -191,6 +191,11 @@ class FlickControlManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setIsDragSpeed(bool speed) async {
+    _flickManager._handleVideoSpeedup(isOn: speed);
+    notifyListeners();
+  }
+
   /// Increase volume between 0.0 - 1.0,
   /// 0.0 being mute and 1.0 full volume.
   Future<void> increaseVolume(double increaseBy) async {

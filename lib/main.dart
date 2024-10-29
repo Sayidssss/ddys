@@ -45,7 +45,7 @@ void main() async {
       supportedLocales: TranslationLibrary.supportedLocales,
       localizationsDelegates: TranslationLibrary.localizationsDelegates,
       // AppTitle
-      title: 'DDYS',
+      title: '低端影视',
       // 首页
       home: const HomePage(),
       // Builder

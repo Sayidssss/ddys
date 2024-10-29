@@ -1,5 +1,5 @@
 name: ddys
-description: "A new Flutter project."
+description: "低端影视Android客户端-非官方"
 publish_to: "none"
 version: 1.0.0+1
 
@@ -26,6 +26,7 @@ dependencies:
   path_provider: ^2.1.4
   encrypt: ^5.0.3
   archive: ^3.6.1
+  hive: ^2.2.3
 
 dev_dependencies:
   flutter_test:

@@ -61,7 +61,7 @@ class Track {
   @JsonKey(name: "portn")
   String portn;
   @JsonKey(name: "srctype")
-  int srctype;
+  dynamic srctype;
   @JsonKey(name: "cut")
   String cut;
   @JsonKey(name: "vttshift")

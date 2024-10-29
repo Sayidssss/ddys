@@ -40,7 +40,7 @@ Track _$TrackFromJson(Map<String, dynamic> json) => Track(
       thumb: Image.fromJson(json['thumb'] as Map<String, dynamic>),
       meta: Meta.fromJson(json['meta'] as Map<String, dynamic>),
       portn: json['portn'] as String,
-      srctype: (json['srctype'] as num).toInt(),
+      srctype: json['srctype'],
       cut: json['cut'] as String,
       vttshift: json['vttshift'] as String,
       userIp: json['userIP'] as String,

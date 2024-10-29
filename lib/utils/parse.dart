@@ -14,6 +14,12 @@ List<Article> parseArticleList(List<dom.Element> list) {
       pic = bg.substring(bg.indexOf("https://"), bg.indexOf(")"));
     }
     var name = a.querySelector('div.post-box-text > h2')!.text;
+    var nm = name.split('(');
+    name = nm[0];
+    var latest = '';
+    if (nm.length > 1) {
+      latest = nm[1].replaceAll(")", "");
+    }
     var remark = a.querySelector('div.post-box-text > p')?.text;
     var categories = a.querySelectorAll('.post-box-meta > a');
     List<Category> categoryList = [];
@@ -23,7 +29,7 @@ List<Article> parseArticleList(List<dom.Element> list) {
       var category = Category(name: cName, url: cUrl);
       categoryList.add(category);
     }
-    Article article = Article(name, url, pic, remark, categoryList);
+    Article article = Article(name, latest, url, pic, remark, categoryList);
     return article;
   }).toList();
 }
@@ -37,12 +43,29 @@ Card buildArticle(Article article) {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ExtendedImage.network(
-            article.pic,
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-            headers: {'Referer': 'https://ddys.pro/'},
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              ExtendedImage.network(
+                article.pic,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+                headers: {'Referer': 'https://ddys.pro/'},
+              ),
+              if (article.latest.isNotEmptyOrNull)
+                Container(
+                    padding: EdgeInsets.only(
+                        left: 10.dm, right: 10.dm, top: 3.dm, bottom: 3.dm),
+                    decoration: BoxDecoration(
+                        color: Color(0xccffffff),
+                        borderRadius:
+                            BorderRadius.only(topLeft: Radius.circular(5.dm))),
+                    child: TextX(
+                      article.latest,
+                      size: 10.sp,
+                    ))
+            ],
           ).aspectRatio(aspectRatio: 1.0 / 1.414),
           Container(
             padding: EdgeInsets.all(5.dm),
@@ -53,7 +76,7 @@ Card buildArticle(Article article) {
               children: [
                 TextX(
                   article.name,
-                  size: 10.sp,
+                  size: 12.sp,
                   maxLines: 1,
                 ),
                 Row(
@@ -62,7 +85,8 @@ Card buildArticle(Article article) {
                 if (article.remark != null)
                   TextX(
                     article.remark!,
-                    size: 6.sp,
+                    size: 8.sp,
+                    maxLines: 1,
                   ),
               ],
             ),
@@ -76,7 +100,7 @@ Card buildArticle(Article article) {
 List<Widget> _getCates(List<Category> categories) {
   List<Widget> list = [];
   for (var cate in categories) {
-    list.add(TextX(cate.name, size: 6.sp).marginOnly(right: 5.dm));
+    list.add(TextX(cate.name, size: 8.sp).marginOnly(right: 5.dm));
   }
   return list;
 }

@@ -96,6 +96,10 @@ class FlickManager {
     _flickDisplayManager!._handleVideoSpeedup(isOn: isOn);
   }
 
+  _handleVideoIsDragSpeed({required bool isOn}) {
+    _flickDisplayManager!._handleVideoIsDragSpeed(isOn: isOn);
+  }
+
   _handleVolumeChange({required double volume}) {
     // assert(forward != null);
     _flickDisplayManager!._handleVolumeChange(volume);

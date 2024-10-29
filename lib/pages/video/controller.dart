@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:ddys/common/model/entity.dart';
 import 'package:ddys/common/model/video.dart';
+import 'package:ddys/common/web_vtt.dart';
 import 'package:encrypt/encrypt.dart' as Enc;
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
@@ -25,13 +26,12 @@ class VideoController extends GetxController with BaseControllerMixin {
   static String _currentUrl = "";
 
   int trackIndex = 0;
+
   @override
   void onInit() {
     super.onInit();
     url = (Get.arguments as Map<String, String>)['url']!;
-    flickManager = FlickManager(
-        videoPlayerController:
-            VideoPlayerController.networkUrl(Uri.parse(_currentUrl)));
+
     getVideoInfo();
   }
 
@@ -43,18 +43,18 @@ class VideoController extends GetxController with BaseControllerMixin {
 
   Future getVideoInfo() async {
     showLoading();
-    var response = await HttpService.to.get(url);
-    if (response != null) {
-      var doc = parse(response.data);
-      video = _parseVideoInfo(doc);
-      _currentUrl = 'https://v.ddys.pro${video!.videoMeta!.tracks[0].src0}';
-      flickManager?.handleChangeVideo(
-        VideoPlayerController.networkUrl(Uri.parse(_currentUrl),
-            closedCaptionFile: getSubs(video!.videoMeta!.tracks[0].subsrc),
-            httpHeaders: {'Referer': 'https://ddys.pro/'}),
-      );
-      updateUi();
+    try {
+      var response = await HttpService.to.get(url);
+      if (response != null) {
+        var doc = parse(response.data);
+        video = _parseVideoInfo(doc);
+        setCurrentTrack(video?.videoMeta?.tracks[0]);
+        updateUi();
+      }
+    } catch (e) {
+      e.printError();
     }
+
     dismissLoading();
   }
 
@@ -142,56 +142,77 @@ class VideoController extends GetxController with BaseControllerMixin {
       return;
     }
     _currentUrl = 'https://v.ddys.pro${track.src0}';
-    flickManager?.handleChangeVideo(
-      VideoPlayerController.networkUrl(Uri.parse(_currentUrl),
-          closedCaptionFile: getSubs(track.subsrc),
-          httpHeaders: {'Referer': 'https://ddys.pro/'}),
-    );
+    log(_currentUrl, 'Video,Video');
+    if (flickManager == null) {
+      flickManager = FlickManager(
+          videoPlayerController: VideoPlayerController.networkUrl(
+              Uri.parse(_currentUrl),
+              closedCaptionFile: getSubs(track.subsrc),
+              httpHeaders: {
+            'referer': 'https://ddys.pro/',
+            'origin': 'https://ddys.pro'
+          }));
+    } else {
+      flickManager?.handleChangeVideo(
+        VideoPlayerController.networkUrl(Uri.parse(_currentUrl),
+            closedCaptionFile: getSubs(track.subsrc),
+            httpHeaders: {
+              'referer': 'https://ddys.pro/',
+              'origin': 'https://ddys.pro'
+            }),
+      );
+    }
     updateUi();
   }
 
+//https://v.ddys.pro/v/kr_drama/A_Virtuous_Business/A_Virtuous_Business_S01E01.mp4
+//https://v.ddys.pro/v/kr_drama/A_Virtuous_Business/A_Virtuous_Business_S01E01.mp4
   void setTrack(int index) {
     trackIndex = index;
     setCurrentTrack(video?.videoMeta?.tracks[index]);
   }
 
-  Future<ClosedCaptionFile> getSubs(String subsrc) async {
-    var path = (await getTemporaryDirectory()).path;
-    var array = subsrc.split('/');
-    var filename = array[array.length - 1];
-    var name = filename.split('.')[0];
-    var response = await HttpService.to.dio.download(
-        'https://ddys.pro/subddr${subsrc}', '${path}${filename}',
-        options: Options(headers: {'Referer': 'https://ddys.pro/'}));
-    if (response != null) {
-      File file = File.fromUri(Uri.file('${path}${filename}'));
-      var fileBytes = file.readAsBytesSync();
-      var wordArray = fileBytes.sublist(16);
-      var hexString = fileBytes
-          .sublist(0, 16)
-          .map(
-            (x) {
-              var y = x.toRadixString(16);
-              var str = '00$y';
-              return str.substring(str.length - 2);
-            },
-          )
-          .toList()
-          .join();
-      final iv = Enc.IV.fromBase16(hexString);
-      final encrypter = Enc.Encrypter(
-          Enc.AES(Enc.Key.fromBase16(hexString), mode: Enc.AESMode.cbc));
-      var list = encrypter.decryptBytes(
-        Enc.Encrypted(wordArray),
-        iv: iv,
-      );
-      var archive = GZipDecoder().decodeBytes(list);
-      var txt = utf8.decode(archive);
-      ClosedCaptionFile vtt = WebVTTCaptionFile(txt);
-      log(txt);
-      return vtt;
-    } else {
-      ClosedCaptionFile vtt = WebVTTCaptionFile('');
+  Future<ClosedCaptionFile>? getSubs(String subsrc) async {
+    try {
+      var path = (await getTemporaryDirectory()).path;
+      var array = subsrc.split('/');
+      var filename = array[array.length - 1];
+      var response = await HttpService.to.dio.download(
+          'https://ddys.pro/subddr$subsrc', '$path$filename',
+          options: Options(headers: {'Referer': url}));
+      log('https://ddys.pro/subddr$subsrc', 'Video,Sub');
+      if (response.statusCode == 200) {
+        File file = File.fromUri(Uri.file('${path}${filename}'));
+        var fileBytes = file.readAsBytesSync();
+        var wordArray = fileBytes.sublist(16);
+        var hexString = fileBytes
+            .sublist(0, 16)
+            .map(
+              (x) {
+                var y = x.toRadixString(16);
+                var str = '00$y';
+                return str.substring(str.length - 2);
+              },
+            )
+            .toList()
+            .join();
+        final iv = Enc.IV.fromBase16(hexString);
+        final encrypter = Enc.Encrypter(
+            Enc.AES(Enc.Key.fromBase16(hexString), mode: Enc.AESMode.cbc));
+        var list = encrypter.decryptBytes(
+          Enc.Encrypted(wordArray),
+          iv: iv,
+        );
+        var archive = GZipDecoder().decodeBytes(list);
+        var txt = utf8.decode(archive);
+        ClosedCaptionFile vtt = WebVTTCaptionFixedFile(txt);
+        return vtt;
+      } else {
+        ClosedCaptionFile vtt = WebVTTCaptionFixedFile('');
+        return vtt;
+      }
+    } catch (e) {
+      ClosedCaptionFile vtt = WebVTTCaptionFixedFile('');
       return vtt;
     }
   }

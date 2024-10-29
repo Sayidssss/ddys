@@ -55,10 +55,24 @@ class SeekVideoAction extends StatelessWidget {
         Provider.of<FlickDisplayManager>(context);
     FlickControlManager controlManager =
         Provider.of<FlickControlManager>(context);
+    FlickVideoManager videoManager = Provider.of<FlickVideoManager>(context);
 
     bool showForwardSeek = displayManager.showForwardSeek;
     bool showBackwardSeek = displayManager.showBackwardSeek;
     bool isSpeedUp = displayManager.showSpeed;
+    bool isDragSpeed = displayManager.isDragSpeed;
+
+    Duration? totalDuration = videoManager.videoPlayerValue?.duration;
+    String? durationInSeconds = totalDuration != null
+        ? (totalDuration - Duration(minutes: totalDuration.inMinutes))
+            .inSeconds
+            .toString()
+            .padLeft(2, '0')
+        : null;
+
+    String textDuration = totalDuration != null
+        ? '${totalDuration.inMinutes}:$durationInSeconds'
+        : '0:00';
 
     return Stack(alignment: Alignment.topCenter, children: <Widget>[
       Row(
@@ -73,14 +87,6 @@ class SeekVideoAction extends StatelessWidget {
                 } else {
                   controlManager.seekBackward(duration);
                 }
-              },
-              onLongPressStart: (details) {
-                isSpeedUp = true;
-                controlManager.setPlaybackSpeed(3.0);
-              },
-              onLongPressEnd: (details) {
-                isSpeedUp = false;
-                controlManager.setPlaybackSpeed(1.0);
               },
               child: Align(
                 alignment: Alignment.center,
@@ -111,14 +117,6 @@ class SeekVideoAction extends StatelessWidget {
                   controlManager.seekForward(duration);
                 }
               },
-              onLongPressStart: (details) {
-                controlManager.setPlaybackSpeed(3.0);
-                isSpeedUp = true;
-              },
-              onLongPressEnd: (details) {
-                controlManager.setPlaybackSpeed(1.0);
-                isSpeedUp = false;
-              },
               child: Align(
                 alignment: Alignment.center,
                 child: AnimatedCrossFade(
@@ -141,6 +139,31 @@ class SeekVideoAction extends StatelessWidget {
           )
         ],
       ),
+      GestureDetector(
+          onLongPressMoveUpdate: (LongPressMoveUpdateDetails details) {
+        if (details.localOffsetFromOrigin.dx > 20) {
+          if (!isDragSpeed) {
+            isDragSpeed = true;
+            isSpeedUp = false;
+            controlManager.setPlaybackSpeed(1.0);
+            controlManager.setIsDragSpeed(true);
+          }
+        }
+      }, onLongPressStart: (details) {
+        if (!isDragSpeed) {
+          isSpeedUp = true;
+          controlManager.setPlaybackSpeed(3.0);
+        }
+      }, onLongPressEnd: (details) {
+        isSpeedUp = false;
+        controlManager.setPlaybackSpeed(1.0);
+        controlManager.setIsDragSpeed(false);
+      }),
+      if (isDragSpeed)
+        TextTag(
+          textDuration,
+          color: Colors.black38,
+        ).marginOnly(top: 10.dm),
       if (isSpeedUp)
         TextTag(
           '播放速度 3X',

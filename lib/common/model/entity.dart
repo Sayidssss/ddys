@@ -34,12 +34,14 @@ class Season {
 
 class Article {
   String name;
+  String latest;
   String url;
   String pic;
   String? remark;
   List<Category> categories;
 
-  Article(this.name, this.url, this.pic, this.remark, this.categories);
+  Article(
+      this.name, this.latest, this.url, this.pic, this.remark, this.categories);
 }
 
 class Video {

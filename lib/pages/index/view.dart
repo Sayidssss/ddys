@@ -1,12 +1,11 @@
-import 'package:ddys/common/model/entity.dart';
 import 'package:ddys/pages/search/index.dart';
-import 'package:ddys/pages/video/index.dart';
 import 'package:ddys/utils/parse.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:getx_scaffold/common/index.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
 
+import '../history/index.dart';
 import 'index.dart';
 
 class IndexPage extends GetView<IndexController> {
@@ -51,6 +50,16 @@ class IndexPage extends GetView<IndexController> {
         builder: (_) {
           return Scaffold(
             appBar: AppBar(
+                leading: IconX.icon(
+                  Icons.watch_later_outlined,
+                  width: 50.dm,
+                  height: 50.dm,
+                ).paddingSymmetric(horizontal: 10.dm, vertical: 5.dm).inkWell(
+                    onTap: () {
+                      Get.to(() => const HistoryPage(),
+                          transition: Transition.fadeIn);
+                    },
+                    borderRadius: 5.dm),
                 title: const Text('首页'),
                 actions: [
                   IconX.icon(
@@ -59,7 +68,7 @@ class IndexPage extends GetView<IndexController> {
                     height: 50.dm,
                   ).paddingSymmetric(horizontal: 10.dm, vertical: 5.dm).inkWell(
                       onTap: () {
-                        Get.to(() => SearchPage(),
+                        Get.to(() => const SearchPage(),
                             transition: Transition.fadeIn);
                       },
                       borderRadius: 5.dm)
