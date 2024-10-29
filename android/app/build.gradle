@@ -4,6 +4,9 @@ plugins {
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
+def keystorePropertiesFile = rootProject.file("app/key.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     namespace = "com.example.ddys"
@@ -20,8 +23,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.ddys"
+        applicationId = "com.ddys.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -31,19 +33,17 @@ android {
     }
     signingConfigs {
         config {
-            storeFile file('../release.keystore')
-            storePassword 'wx320924...'
-            keyPassword 'wx320924...'
-            keyAlias 'alvin'
+            storeFile file(System.getenv("KEYSTORE") ?:"release.keystore")
+            storePassword System.getenv("KEYSTORE_PASSWORD")?:keystoreProperties['storePassword']
+            keyAlias System.getenv("KEY_ALIAS")?:keystoreProperties['keyAlias']
+            keyPassword System.getenv("KEY_PASSWORD")?:keystoreProperties['keyPassword']
         }
     }
 
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.config
+              signingConfig = signingConfigs.config
         }
 
     }
