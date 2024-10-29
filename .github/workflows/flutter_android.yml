@@ -1,7 +1,9 @@
 name: Flutter Android CI
 
-on: [push]
-
+on:
+  push:
+    tags:
+      - v*
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,4 +23,18 @@ jobs:
     - name: check flutter version
       run: flutter --version
     - run: flutter pub get
-    - run: flutter build apk
+    - run: echo $ENCODED_KEYSTORE | base64 -di > android/app/release.keystore
+      env:
+        ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
+    # 打包 APK
+    - run: flutter build apk --release
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD}}
+      # 发布到 Release
+    - name: Release apk
+      uses: ncipollo/release-action@v1.5.0
+      with:
+        artifacts: "build/app/outputs/apk/release/*.apk"
+        token: ${{ secrets.RELEASE_TOKEN }}
