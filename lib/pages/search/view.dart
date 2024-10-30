@@ -1,7 +1,10 @@
+import 'package:ddys/common/model/entity.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:getx_scaffold/common/index.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
 
+import '../video/view.dart';
 import 'index.dart';
 
 class SearchPage extends GetView<SearchPageController> {
@@ -9,12 +12,35 @@ class SearchPage extends GetView<SearchPageController> {
 
   // 主视图
   Widget _buildView() {
-    return <Widget>[]
-        .toColumn(crossAxisAlignment: CrossAxisAlignment.start)
-        .padding(all: 10.w, bottom: 50.w)
-        .scrollable(primary: true)
-        .scrollbar()
-        .width(1.sw);
+    return EasyRefresh.builder(
+      controller: controller.smartController,
+      onRefresh: () async {
+        controller.onRefresh();
+      },
+      onLoad: () async {
+        controller.onLoading();
+      },
+      childBuilder: (context, physics) {
+        return ListView.builder(
+          physics: physics,
+          itemBuilder: (context, index) {
+            var article = controller.articleList[index];
+            return ListTileX(
+              title: article.name,
+              subTitle: _getSubText(article),
+              trailing: Row(
+                children: _buildCates(article.categories),
+              ),
+              onTap: () {
+                Get.to(() => const VideoPage(),
+                    arguments: {'url': article.url});
+              },
+            );
+          },
+          itemCount: controller.articleList.length,
+        );
+      },
+    );
   }
 
   @override
@@ -51,5 +77,27 @@ class SearchPage extends GetView<SearchPageController> {
         );
       },
     );
+  }
+
+  List<Widget> _buildCates(List<Category> categories) {
+    List<Widget> cates = [];
+    for (var cate in categories) {
+      cates.add(TextTag(cate.name));
+    }
+    return cates.sublist(0, 1);
+  }
+
+  String _getSubText(Article article) {
+    var latest = article.latest;
+    var remark = article.remark;
+    if (latest.isNotEmptyOrNull && remark.isNotEmptyOrNull) {
+      return '$latest  $remark';
+    } else if (latest.isNotEmptyOrNull) {
+      return latest;
+    } else if (remark.isNotEmptyOrNull) {
+      return remark!;
+    } else {
+      return '';
+    }
   }
 }

@@ -52,10 +52,10 @@ class HttpService extends GetxService {
     // Log拦截器
     dio.interceptors.add(
       PrettyDioLogger(
-        showRequest: false,
-        showResponse: true,
-        responseHeader: true,
-        responseBody: true,
+        showRequest: true,
+        showResponse: false,
+        responseHeader: false,
+        responseBody: false,
         showError: true,
         logPrint: Logger.network,
       ),

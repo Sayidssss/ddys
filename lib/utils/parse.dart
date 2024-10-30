@@ -34,6 +34,32 @@ List<Article> parseArticleList(List<dom.Element> list) {
   }).toList();
 }
 
+List<Article> parseSearchArticleList(List<dom.Element> list) {
+  return list.map((a) {
+    var titleElement = a.querySelector('div > div > header > h2 > a');
+    var url = titleElement!.attributes['href']!;
+    var name = titleElement.text;
+    var nm = name.split('(');
+    name = nm[0];
+    var latest = '';
+    if (nm.length > 1) {
+      latest = nm[1].replaceAll(")", "");
+    }
+    var remark = a.querySelector('div > div > div.entry-content > p')?.text;
+    var categories = a.querySelectorAll(
+        'div > div > footer > div > ul > li.meta_categories > span > a');
+    List<Category> categoryList = [];
+    for (var cate in categories) {
+      var cName = cate.text;
+      var cUrl = cate.attributes['href']!;
+      var category = Category(name: cName, url: cUrl);
+      categoryList.add(category);
+    }
+    Article article = Article(name, latest, url, '', remark, categoryList);
+    return article;
+  }).toList();
+}
+
 Card buildArticle(Article article) {
   return Card(
       elevation: 5,

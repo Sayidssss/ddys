@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
+import 'package:ddys/common/MyDatabase.dart';
 import 'package:ddys/common/model/entity.dart';
 import 'package:ddys/common/model/video.dart';
 import 'package:ddys/common/web_vtt.dart';
@@ -31,7 +32,8 @@ class VideoController extends GetxController with BaseControllerMixin {
   void onInit() {
     super.onInit();
     url = (Get.arguments as Map<String, String>)['url']!;
-
+    trackIndex =
+        (Get.arguments as Map<String, String>)['trackIndex']?.toInt() ?? 0;
     getVideoInfo();
   }
 
@@ -47,8 +49,17 @@ class VideoController extends GetxController with BaseControllerMixin {
       var response = await HttpService.to.get(url);
       if (response != null) {
         var doc = parse(response.data);
-        video = _parseVideoInfo(doc);
-        setCurrentTrack(video?.videoMeta?.tracks[0]);
+        Uri uri = Uri.parse(url);
+        var key = uri.pathSegments[0];
+        var season = 1;
+        if (uri.pathSegments.length > 1) {
+          season = uri.pathSegments[1].toInt(defValue: 1) ?? 1;
+        }
+        video = _parseVideoInfo(key, season, doc);
+        if (video != null) {
+          setCurrentTrack(video?.videoMeta?.tracks[trackIndex]);
+        }
+
         updateUi();
       }
     } catch (e) {
@@ -58,7 +69,7 @@ class VideoController extends GetxController with BaseControllerMixin {
     dismissLoading();
   }
 
-  Video _parseVideoInfo(Document doc) {
+  Video _parseVideoInfo(String key, int season, Document doc) {
     var title = doc.querySelector('div.post-content > h1')?.text;
     var publishDate = doc
         .querySelector(
@@ -125,22 +136,31 @@ class VideoController extends GetxController with BaseControllerMixin {
     }
     List<Season>? seasonList = [];
     var seasonAll = doc.querySelectorAll(
-        '#post-2530 > div.post-content > div.entry > div.page-links >.post-page-numbers');
+        'div.post-content > div.entry > div.page-links >.post-page-numbers');
     for (var child in seasonAll) {
       seasonList.add(Season(
           name: child.text,
           url: child.localName == 'span' ? url : child.attributes['href']!,
           isCurrent: child.localName == 'span'));
     }
-
-    return Video(title, publishDate, updatedDate, categoryList, tagList,
-        videoMeta, videoIntro, seasonList);
+    if (seasonList.isEmpty) {
+      season = -1;
+    }
+    return Video(key, title, season, publishDate, updatedDate, categoryList,
+        tagList, videoMeta, videoIntro, seasonList);
   }
 
   void setCurrentTrack(Track? track) {
     if (track == null) {
       return;
     }
+    DatabaseHelper.db.insert(History(
+        videoKey: video!.key,
+        name: video?.name ?? '',
+        url: url,
+        img: video!.videoIntro?.post ?? '',
+        season: video!.season,
+        eps: trackIndex));
     _currentUrl = 'https://v.ddys.pro${track.src0}';
     log(_currentUrl, 'Video,Video');
     if (flickManager == null) {

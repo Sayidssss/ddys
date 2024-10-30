@@ -46,6 +46,8 @@ class Article {
 
 class Video {
   String? name;
+  String key;
+  int season;
   String? publishDate;
   String? updateDate;
   List<Category>? categories;
@@ -53,8 +55,17 @@ class Video {
   VideoMeta? videoMeta;
   VideoIntro? videoIntro;
   List<Season> seasons;
-  Video(this.name, this.publishDate, this.updateDate, this.categories,
-      this.tags, this.videoMeta, this.videoIntro, this.seasons);
+  Video(
+      this.key,
+      this.name,
+      this.season,
+      this.publishDate,
+      this.updateDate,
+      this.categories,
+      this.tags,
+      this.videoMeta,
+      this.videoIntro,
+      this.seasons);
 }
 
 class VideoIntro {
@@ -64,4 +75,45 @@ class VideoIntro {
   String? abstract;
   String? intro;
   VideoIntro(this.post, this.title, this.rating, this.abstract, this.intro);
+}
+
+class History {
+  String videoKey;
+  String name;
+  String url;
+  String img;
+  int season;
+  int eps;
+  History({
+    required this.videoKey,
+    required this.name,
+    required this.url,
+    required this.img,
+    required this.season,
+    required this.eps,
+  });
+
+  factory History.fromMap(Map<String, dynamic> json) {
+    return History(
+      videoKey: json["video_key"],
+      name: json["name"],
+      url: json["url"],
+      img: json["img"],
+      season: json["season"],
+      eps: json["eps"],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "video_key": this.videoKey,
+      "name": this.name,
+      "url": this.url,
+      "img": this.img,
+      "season": this.season,
+      "eps": this.eps,
+    };
+  }
+
+//
 }

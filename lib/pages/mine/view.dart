@@ -10,34 +10,74 @@ class MinePage extends GetView<MineController> {
   // 主视图
   Widget _buildView() {
     return <Widget>[
-      SwitchListTile(
-        title: TextX.labelLarge('自动播放下一个'),
-        value: controller.isAutoNext,
-        onChanged: (b) {
-          controller.isAutoNext = b;
-          controller.updateUi();
+      ListTileX(
+        title: '自动播放下一个',
+        trailing: Switch(
+            value: controller.isAutoNext,
+            onChanged: (b) {
+              controller.setAutoNext(b);
+            }),
+      ),
+      ListTileX(
+        title: '自动打开字幕',
+        trailing: Switch(
+            value: controller.isAutoSub,
+            onChanged: (b) {
+              controller.setAutoSub(b);
+            }),
+      ),
+      ListTileX(
+        title: '自动收藏(播放十分钟后)',
+        trailing: Switch(
+            value: controller.isAutoFav,
+            onChanged: (b) {
+              controller.setAutoFav(b);
+            }),
+      ),
+      ListTileX(
+        title: '清理播放记录',
+        onTap: () {
+          Get.defaultDialog(
+            title: '提示',
+            content: TextX.bodyMedium('清理所有播放记录?'),
+            textConfirm: '确认',
+            textCancel: '取消',
+            onConfirm: () {},
+            onCancel: () {},
+          );
         },
       ),
-      SwitchListTile(
-        title: TextX.labelLarge('自动打开字幕'),
-        value: controller.isAutoNext,
-        onChanged: (b) {
-          controller.isAutoNext = b;
-          controller.updateUi();
+      ListTileX(
+        title: '清理播放缓存',
+        onTap: () {
+          Get.defaultDialog(
+            title: '提示',
+            content: TextX.bodyMedium('清理播放缓存?'),
+            textConfirm: '确认',
+            textCancel: '取消',
+            onConfirm: () {},
+            onCancel: () {},
+          );
         },
       ),
-      SwitchListTile(
-        title: TextX.labelLarge('自动收藏(播放十分钟后)'),
-        value: controller.isAutoNext,
-        onChanged: (b) {
-          controller.isAutoNext = b;
-          controller.updateUi();
+      ListTileX(
+        title: '选择域名',
+        onTap: () {
+          Get.defaultDialog(
+            title: '选择域名',
+            content: ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return ListTileX(
+                  title: '域名 ${index + 1}',
+                  subTitle: controller.domainList[index],
+                );
+              },
+              itemCount: controller.domainList.length,
+            ),
+          );
         },
       ),
-      ListTileX(title: '清理播放记录'),
-      ListTileX(title: '清理播放缓存'),
-      ListTileX(title: '选择域名'),
-      ListTileX(title: '选择线路'),
     ]
         .toColumn(crossAxisAlignment: CrossAxisAlignment.start)
         .padding(all: 10.w, bottom: 50.w)

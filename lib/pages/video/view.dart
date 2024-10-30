@@ -91,9 +91,14 @@ class VideoPage extends GetView<VideoController> {
                                 controller.video!.videoIntro!.rating!)
                           ],
                         ),
-                        TextX.bodyMedium(
+                        ReadMoreText(
                           controller.video!.videoIntro!.intro!,
-                          maxLines: 6,
+                          trimLines: 6,
+                          style: TextStyle(fontSize: 14.sp),
+                          trimMode: TrimMode.Line,
+                          locale: Locale('zh', 'CN'),
+                          trimExpandedText: '收起',
+                          trimCollapsedText: ' 更多',
                         ),
                       ],
                     ).marginOnly(
