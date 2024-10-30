@@ -91,16 +91,16 @@ class SeekVideoAction extends StatelessWidget {
               child: Align(
                 alignment: Alignment.center,
                 child: AnimatedCrossFade(
-                  duration: Duration(milliseconds: 100),
+                  duration: const Duration(milliseconds: 100),
                   firstChild: IconTheme(
-                    data: IconThemeData(color: Colors.transparent),
+                    data: const IconThemeData(color: Colors.transparent),
                     child: backwardSeekIcon,
                   ),
                   crossFadeState: showBackwardSeek
                       ? CrossFadeState.showSecond
                       : CrossFadeState.showFirst,
                   secondChild: IconTheme(
-                    data: IconThemeData(color: Colors.white),
+                    data: const IconThemeData(color: Colors.white),
                     child: backwardSeekIcon,
                   ),
                 ),
@@ -120,9 +120,9 @@ class SeekVideoAction extends StatelessWidget {
               child: Align(
                 alignment: Alignment.center,
                 child: AnimatedCrossFade(
-                  duration: Duration(milliseconds: 100),
+                  duration: const Duration(milliseconds: 100),
                   firstChild: IconTheme(
-                      data: IconThemeData(
+                      data: const IconThemeData(
                         color: Colors.transparent,
                       ),
                       child: forwardSeekIcon),
@@ -130,7 +130,7 @@ class SeekVideoAction extends StatelessWidget {
                       ? CrossFadeState.showSecond
                       : CrossFadeState.showFirst,
                   secondChild: IconTheme(
-                    data: IconThemeData(color: Colors.white),
+                    data: const IconThemeData(color: Colors.white),
                     child: forwardSeekIcon,
                   ),
                 ),
@@ -143,19 +143,15 @@ class SeekVideoAction extends StatelessWidget {
           onLongPressMoveUpdate: (LongPressMoveUpdateDetails details) {
         if (details.localOffsetFromOrigin.dx > 20) {
           if (!isDragSpeed) {
-            isDragSpeed = true;
-            isSpeedUp = false;
             controlManager.setPlaybackSpeed(1.0);
             controlManager.setIsDragSpeed(true);
           }
         }
       }, onLongPressStart: (details) {
         if (!isDragSpeed) {
-          isSpeedUp = true;
           controlManager.setPlaybackSpeed(3.0);
         }
       }, onLongPressEnd: (details) {
-        isSpeedUp = false;
         controlManager.setPlaybackSpeed(1.0);
         controlManager.setIsDragSpeed(false);
       }),
@@ -165,10 +161,20 @@ class SeekVideoAction extends StatelessWidget {
           color: Colors.black38,
         ).marginOnly(top: 10.dm),
       if (isSpeedUp)
-        TextTag(
+        const TextX(
           '播放速度 3X',
-          color: Colors.black38,
-        ).marginOnly(top: 10.dm),
+          color: Colors.white,
+          size: 12,
+        )
+            .padding(
+              horizontal: 10.w,
+              vertical: 4.h,
+            )
+            .border(
+              radius: 5.r,
+              backgroundColor: Colors.black38,
+            )
+            .marginOnly(top: 10.dm),
       if (child != null) SizedBox(child: child),
     ]);
   }

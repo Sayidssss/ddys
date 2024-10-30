@@ -29,7 +29,7 @@ class DatabaseHelper {
       await db.execute(
           'CREATE TABLE IF NOT EXISTS watch_history (video_key TEXT PRIMARY KEY, name TEXT, url TEXT, season INTEGER, eps INTEGER, img TEXT,time TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
       await db.execute(
-          'CREATE TRIGGER [UpdateLastTime] AFTER UPDATE ON watch_history FOR EACH ROW BEGIN UPDATE watch_history SET time = CURRENT_TIMESTAMP WHERE video_key = old.video_key; END;');
+          'CREATE TRIGGER IF NOT EXISTS [UpdateLastTime] AFTER UPDATE ON watch_history FOR EACH ROW BEGIN UPDATE watch_history SET time = CURRENT_TIMESTAMP WHERE video_key = old.video_key; END;');
     });
     return db;
   }

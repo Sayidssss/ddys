@@ -106,12 +106,12 @@ class History {
 
   Map<String, dynamic> toMap() {
     return {
-      "video_key": this.videoKey,
-      "name": this.name,
-      "url": this.url,
-      "img": this.img,
-      "season": this.season,
-      "eps": this.eps,
+      "video_key": videoKey,
+      "name": name,
+      "url": url,
+      "img": img,
+      "season": season,
+      "eps": eps,
     };
   }
 

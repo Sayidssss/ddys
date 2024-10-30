@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_is_empty
+
 import 'package:ddys/pages/video/landscape_controls.dart';
 import 'package:ddys/pages/video/portrait_controls.dart';
 import 'package:flick_video_player/flick_video_player.dart';
@@ -19,6 +21,7 @@ class VideoPage extends GetView<VideoController> {
         FlickVideoPlayer(
           flickManager: controller.flickManager!,
           flickVideoWithControls: const FlickVideoWithControls(
+            videoFit: BoxFit.contain,
             controls: LandscapeControls(),
           ),
           flickVideoWithControlsFullscreen: _buildFullScreenControl(),
@@ -31,12 +34,39 @@ class VideoPage extends GetView<VideoController> {
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return controller.trackIndex == index
-                ? ButtonX.secondary((index + 1).toString(), onPressed: () {
+                ? Container(
+                    height: 40.dm,
+                    width: 40.dm,
+                    decoration: BoxDecoration(
+                        color: ThemeColor.primary,
+                        borderRadius: BorderRadius.all(Radius.circular(5.dm))),
+                    child: Center(
+                      child: TextX.labelSmall(
+                        (index + 1).toString(),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ).onTap(() {
                     controller.setTrack(index);
-                  }).width(40.dm).height(40.dm).marginOnly(right: 10.dm)
-                : ButtonX.outline((index + 1).toString(), onPressed: () {
+                  }).marginOnly(right: 10.dm)
+                : Container(
+                    height: 40.dm,
+                    width: 40.dm,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: ThemeColor.primary,
+                          width: 1.dm,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(5.dm))),
+                    child: Center(
+                      child: TextX.labelSmall(
+                        (index + 1).toString(),
+                        color: ThemeColor.primary,
+                      ),
+                    ),
+                  ).onTap(() {
                     controller.setTrack(index);
-                  }).width(40.dm).height(40.dm).marginOnly(right: 10.dm);
+                  }).marginOnly(right: 10.dm);
           },
           itemCount: controller.video?.videoMeta?.tracks.length ?? 0,
         ).height(40.dm),
@@ -96,8 +126,7 @@ class VideoPage extends GetView<VideoController> {
                           trimLines: 6,
                           style: TextStyle(fontSize: 14.sp),
                           trimMode: TrimMode.Line,
-                          locale: Locale('zh', 'CN'),
-                          trimExpandedText: '收起',
+                          trimExpandedText: ' 收起',
                           trimCollapsedText: ' 更多',
                         ),
                       ],
@@ -122,22 +151,22 @@ class VideoPage extends GetView<VideoController> {
 
   @override
   Widget build(BuildContext context) {
+    Future<bool> onWillPop() async {
+      if (controller.flickManager?.flickControlManager?.isFullscreen == true) {
+        controller.flickManager?.flickControlManager?.exitFullscreen();
+
+        return false;
+      }
+      return true; // 否则允许退出页面
+    }
+
     return GetBuilder<VideoController>(
       init: VideoController(),
       id: 'video',
       builder: (_) {
-        return PopScope(
-          onPopInvokedWithResult: (bool didPop, value) async {
-            if (didPop) {
-              return;
-            }
-            if (controller.flickManager?.flickControlManager?.isFullscreen ==
-                false) {
-              SystemNavigator.pop();
-            } else {
-              controller.flickManager?.flickControlManager?.exitFullscreen();
-            }
-          },
+        // ignore: deprecated_member_use
+        return WillPopScope(
+          onWillPop: onWillPop,
           child: Scaffold(
             extendBody: false,
             resizeToAvoidBottomInset: false,
@@ -155,6 +184,11 @@ class VideoPage extends GetView<VideoController> {
   Widget _buildFullScreenControl() {
     return const FlickVideoWithControls(
       controls: PortraitControls(),
+      videoFit: BoxFit.contain,
+      closedCaptionTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 24,
+      ),
     );
   }
 }
