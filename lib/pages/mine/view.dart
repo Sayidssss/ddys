@@ -1,3 +1,4 @@
+import 'package:ddys/common/MyDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:getx_scaffold/common/index.dart';
 import 'package:getx_scaffold/getx_scaffold.dart';
@@ -27,7 +28,7 @@ class MinePage extends GetView<MineController> {
             }),
       ),
       ListTileX(
-        title: '自动收藏(播放十分钟后)',
+        title: '自动加入播放记录',
         trailing: Switch(
             value: controller.isAutoFav,
             onChanged: (b) {
@@ -42,7 +43,10 @@ class MinePage extends GetView<MineController> {
             content: TextX.bodyMedium('清理所有播放记录?'),
             textConfirm: '确认',
             textCancel: '取消',
-            onConfirm: () {},
+            onConfirm: () {
+              DatabaseHelper.db.deleteAll();
+              showToast('清理成功');
+            },
             onCancel: () {},
           );
         },
@@ -55,7 +59,9 @@ class MinePage extends GetView<MineController> {
             content: TextX.bodyMedium('清理播放缓存?'),
             textConfirm: '确认',
             textCancel: '取消',
-            onConfirm: () {},
+            onConfirm: () {
+              showToast('清理成功');
+            },
             onCancel: () {},
           );
         },

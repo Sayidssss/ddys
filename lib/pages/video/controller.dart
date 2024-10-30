@@ -154,13 +154,15 @@ class VideoController extends GetxController with BaseControllerMixin {
     if (track == null) {
       return;
     }
-    DatabaseHelper.db.insert(History(
-        videoKey: video!.key,
-        name: video?.name ?? '',
-        url: url,
-        img: video!.videoIntro?.post ?? '',
-        season: video!.season,
-        eps: trackIndex));
+    if (getBoolAsync('is_auto_fav')) {
+      DatabaseHelper.db.insert(History(
+          videoKey: video!.key,
+          name: video?.name ?? '',
+          url: url,
+          img: video!.videoIntro?.post ?? '',
+          season: video!.season,
+          eps: trackIndex));
+    }
     _currentUrl = 'https://v.ddys.pro${track.src0}';
     log(_currentUrl, 'Video,Video');
     if (flickManager == null) {
@@ -182,18 +184,24 @@ class VideoController extends GetxController with BaseControllerMixin {
             }),
       );
     }
-    flickManager?.flickControlManager?.showSubtitle();
-    flickManager?.flickVideoManager?.addListener(() {
-      if (flickManager?.flickVideoManager?.isVideoEnded == true) {
-        trackIndex = trackIndex + 1;
-        if (trackIndex < video!.videoMeta!.tracks.length) {
-          showToast('正在播放下一集');
-          setTrack(trackIndex);
-        } else {
-          showToast('没有下一集了!');
+    if (getBoolAsync('is_auto_sub')) {
+      flickManager?.flickControlManager?.showSubtitle();
+    } else {
+      flickManager?.flickControlManager?.hideSubtitle();
+    }
+    if (getBoolAsync('is_auto_next')) {
+      flickManager?.flickVideoManager?.addListener(() {
+        if (flickManager?.flickVideoManager?.isVideoEnded == true) {
+          trackIndex = trackIndex + 1;
+          if (trackIndex < video!.videoMeta!.tracks.length) {
+            showToast('正在播放下一集');
+            setTrack(trackIndex);
+          } else {
+            showToast('没有下一集了!');
+          }
         }
-      }
-    });
+      });
+    }
     updateUi();
   }
 

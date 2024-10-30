@@ -77,6 +77,11 @@ class DatabaseHelper {
     await db?.rawDelete('DELETE FROM watch_history WHERE video_key = ?', [key]);
   }
 
+  Future<void> deleteAll() async {
+    var db = await database;
+    await db?.rawDelete('DELETE FROM watch_history WHERE 1 = 1');
+  }
+
   //update database by id
   Future<void> updateDatabase(History history) async {
     final db = await database;
