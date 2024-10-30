@@ -54,6 +54,7 @@ class IndexPage extends GetView<IndexController> {
                   Icons.watch_later_outlined,
                   width: 50.dm,
                   height: 50.dm,
+                  color: ThemeColor.primary,
                 ).paddingSymmetric(horizontal: 10.dm, vertical: 5.dm).inkWell(
                     onTap: () {
                       Get.to(() => const HistoryPage(),
@@ -66,6 +67,7 @@ class IndexPage extends GetView<IndexController> {
                     AntdIcon.search,
                     width: 50.dm,
                     height: 50.dm,
+                    color: ThemeColor.primary,
                   ).paddingSymmetric(horizontal: 10.dm, vertical: 5.dm).inkWell(
                       onTap: () {
                         Get.to(() => const SearchPage(),
